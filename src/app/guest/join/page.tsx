@@ -6,6 +6,7 @@ import {push, ref, set, onValue} from "firebase/database"
 import { Guest, guestStore } from '$/lib/guest'
 import { db } from '$/lib/firebase.config'
 import { useRouter } from 'next/navigation'
+import GuestsList from '$/components/GuestsList'
 
 function Join() {
   const router = useRouter()
@@ -58,25 +59,7 @@ function Join() {
         </div>
         <input type='submit' value="Joindre" className='text-white font-bold bg-indigo-700 rounded px-12 py-2'/>
       </form>
-      <div className='pt-4'>
-
-        <h1 className='text-4xl text-stone-600 py-2 text-left rounded-lg shadow bg-stone-200 px-14'>Guests</h1>
-
-        <div className='text-center overflow-scroll'>
-          {
-            guests.length == 0 ?
-              <p className='font-light pt-12'>Personne n'a joint encore.</p> :
-              <ul>
-                {
-                  guests.map(
-                    (g,i)=>
-                      <li key={i} className='px-2 py-4'>{g.username}</li>
-                  )
-                }
-              </ul>
-          }
-        </div>
-      </div>
+      <GuestsList id={id as string}/>
     </main>
   )
 }
