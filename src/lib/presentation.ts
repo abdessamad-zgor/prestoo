@@ -6,13 +6,14 @@ type PresentationData = {
   support: string,
   title: string,
   description: string,
-  startedAt: number
+  startedAt?: number,
+  finishedAt?: number
 }
 
 interface PresentationState  {
   _data : PresentationData|null,
   code: string,
-  setPresentation(obj ?: PresentationData):void,
+  setPresentation(obj ?: Partial<PresentationData>):void,
   setAccessCode(code: string):void
 }
 
@@ -21,12 +22,11 @@ export const presentationStore = create<PresentationState>()(
     (set)=>({
       _data: null,
       code: "",
-      setPresentation: (obj)=>{
-        set({_data: obj ?? null});
-      },
-      setAccessCode: (code)=>{
-        set({code});
-      }
+      setPresentation: (obj)=>
+        set((state)=>({_data: obj ? {...state._data, ...obj} as PresentationData : null}))
+      ,
+      setAccessCode: (code)=>
+        set({code})
     }),
     {
       name: "prestoo-presentation"

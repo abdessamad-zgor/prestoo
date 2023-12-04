@@ -29,7 +29,7 @@ interface PresentationState  {
   _data : PresentationData,
   _liveData: LivePresentationData,
   guest: Guest,
-  setPresentation(obj ?: PresentationData):void,
+  setPresentation(obj ?: Partial<PresentationData>):void,
   setGuest(guest: Guest):void,
   setLiveData(obj ?: LivePresentationData|Partial<LivePresentationData>): void
 }
@@ -43,9 +43,8 @@ export const guestStore = create<PresentationState>()(
         username: ""
       }, 
       _liveData: null,
-      setPresentation: (obj)=>{
-        set({_data: obj ?? null});
-      },
+      setPresentation: (obj)=>
+        set((state)=>({_data: obj ? {...state._data, ...obj} as PresentationData : null})),
       setGuest: (guest)=>set({ guest }),
       setLiveData: (obj)=>set((state)=>({...state, _liveData: {...state._liveData, ...obj } as LivePresentationData}))
     }),

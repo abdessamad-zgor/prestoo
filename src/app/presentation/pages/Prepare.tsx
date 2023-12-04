@@ -47,13 +47,13 @@ export default function Prepare() {
     let presentationAccessCode = generateCode()
     if(url){
       try {
-        await set(presentationRef, { id: presentationID, title: data.title, description: data.description, support: url, startedAt: Date.now() });
-        await set(dbRef(db, "access-codes/"+presentationAccessCode), {[presentationAccessCode]: presentationID})
+        await set(presentationRef, { id: presentationID, title: data.title, description: data.description, support: url });
+        await set(dbRef(db, "access-codes/"+presentationAccessCode), presentationID );
 
       } catch (err) {
         console.error(err);
       }
-      setPresentation({ id: presentationID, title: data.title, description: data.description, support: url, startedAt: Date.now()});
+      setPresentation({ id: presentationID, title: data.title, description: data.description, support: url });
       setAccessCode(presentationAccessCode);
       navigate("/start")
     } else 

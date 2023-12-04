@@ -5,9 +5,7 @@ import Prepare from '../pages/Prepare'
 import Start from '../pages/Start'
 
 function Presentation() {
-  console.log(location.href)
   return (
-    
     <BrowserRouter basename='/presentation'>
       <Routes>
         <Route path='/prepare' element={<Prepare/>}/>

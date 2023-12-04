@@ -1,22 +1,34 @@
 "use client"
 import React, {useEffect, useState} from 'react'
-import {onValue, ref} from "firebase/database"
+import {onValue, ref, update} from "firebase/database"
 import { presentationStore } from '$/lib/presentation'
 import {Guest} from "$/lib/guest";
 import { db } from '$/lib/firebase.config';
+import { useNavigate } from 'react-router-dom';
 
 function Start() {
-  const [guests, setGuests] = useState<Guest[]>([])
-  let {code, title, description, id} = presentationStore(state=>({...state._data, code: state.code}))
+  const navigate = useNavigate()
+  const [guests, setGuests] = useState<Guest[]>([]);
+  let {code, title, description, id, setPresentation} = presentationStore(state=>({...state._data, code: state.code, setPresentation: state.setPresentation}));
 
   useEffect(()=>{
     let guestRef = ref(db, "guests/"+ id)
     onValue(guestRef, (snapshot)=>{
       let guestsList = snapshot.val();
       if (!guestsList || guestsList.length==0) guestsList = [];
-      setGuests(guestsList as Guest[])
+      setGuests(Object.keys(guestsList).map(k=>guestsList[k]));
     })
   }, [id])
+
+  const startPresentation = ()=>{
+    const startedAt = Date.now()
+    console.log(startedAt)
+    update(ref(db), {[`presentations/${id}/startedAt`]: startedAt })
+      .then(()=>{
+        setPresentation({startedAt});
+        if (id) navigate("/"+id);
+      })  
+    }
 
   return (
     <main className='w-full min-h-screen flex justify-center items-stretch bg-stone-700'>
@@ -55,7 +67,7 @@ function Start() {
             </div>
           </div>
           <div className='absolute z-10 p-2 bottom-0 left-0 right-0'>
-            <button className='text-white rounded bg-indigo-700 py-2 font-bold w-full text-2xl'>Start</button>
+            <button className='text-white rounded bg-indigo-700 py-2 font-bold w-full text-2xl' onClick={startPresentation}>Start</button>
           </div>
         </div>
       </div>

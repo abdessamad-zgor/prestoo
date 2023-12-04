@@ -11,9 +11,9 @@ type AccessCode = {
 }
 
 
-function Join() {
+function VerifyCode() {
   const router = useRouter()
-  const {setPresentation} = guestStore((state)=>({setPresentation: state.setPresentation}))
+  const { setPresentation } = guestStore((state)=>({setPresentation: state.setPresentation}))
   const {register, handleSubmit} = useForm<AccessCode>()
 
   const verifyCode = async (code: string)=>{
@@ -63,4 +63,4 @@ function Join() {
   );
 }
 
-export default Join
+export default VerifyCode;
