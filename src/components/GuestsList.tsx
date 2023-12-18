@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
-import { Guest } from '$/lib/guest';
 import {ref, onValue} from "firebase/database"
+import { Guest } from '$/lib/guest';
 import { db } from '$/lib/firebase.config';
 
 type GuestsListProps = {

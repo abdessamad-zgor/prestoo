@@ -5,14 +5,14 @@ import { getDatabase } from "firebase/database";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig  = {
-  apiKey: "AIzaSyAnUoA6tME3k07Agz7OwuWZEcBLj5zfSBs",
-  authDomain: "sakora-31b92.firebaseapp.com",
-  databaseURL: "https://sakora-31b92-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "sakora-31b92",
-  storageBucket: "sakora-31b92.appspot.com",
-  messagingSenderId: "822656550700",
-  appId: "1:822656550700:web:16e4719b7c8ab85b780e89",
-  measurementId: "G-RBFWGSM9TW"
+  apiKey: process.env.NEXT_PUBLIC_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
+  databaseURL: process.env.NEXT_PUBLIC_DATABASE_URL,
+  projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_APP_ID,
+  measurementId: process.env.NEXT_URL_MEASUREMENT_ID
 }
 
 const app = initializeApp(firebaseConfig);

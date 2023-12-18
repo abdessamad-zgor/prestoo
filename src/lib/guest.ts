@@ -3,7 +3,7 @@ import {persist} from "zustand/middleware"
 
 type PresentationData = {
   id: string,
-  support: string,
+  support: Blob,
   title: string,
   description: string,
   startedAt: number

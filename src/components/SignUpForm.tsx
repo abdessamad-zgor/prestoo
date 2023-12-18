@@ -1,8 +1,10 @@
+"use client"
 import React from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Link from "next/link";
-import {auth} from "$/lib/firebase.config";
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from "$/lib/firebase.config";
+import { PRESTOO_COOKIE_TOKEN } from '$/lib/util';
 
 type Credentials = {
   email: string,
@@ -17,6 +19,8 @@ const SignUpForm = () => {
   const onSubmit: SubmitHandler<Credentials> = async (data) => {
     try{
       let _ = await createUserWithEmailAndPassword(auth, data.email, data.password)
+      const idToken = await auth.currentUser?.getIdToken(true);
+      document.cookie = `${PRESTOO_COOKIE_TOKEN}=${idToken}; expires=${(new Date(Date.now()+1000*60*60*24*7)).toUTCString()}`; 
       location.href = "/auth/verify";
     } catch (err) {
       console.error(err)
@@ -28,15 +32,15 @@ const SignUpForm = () => {
       <div className='p-4 bg-white rounded-lg shadow-lg py-4'>
         <div className='flex flex-col'>
           <label >Email:</label>
-          <input className='w-full rounded border border-stone-300 py-px px-2 text-xl text-xl focus:border-sky-300 focus:shadow focus:shadow-sky-100' {...register("email")}/>
+          <input className='w-full rounded border border-stone-300 py-px px-2 text-xl focus:border-sky-300 focus:shadow focus:shadow-sky-100' {...register("email")}/>
         </div>
         <div className='flex flex-col'>
           <label >Mot de passe:</label>
-          <input className='w-full rounded border border-stone-300 py-px px-2 text-xl text-xl focus:border-sky-300 focus:shadow focus:shadow-sky-100' {...register("password")}/>
+          <input className='w-full rounded border border-stone-300 py-px px-2 text-xl focus:border-sky-300 focus:shadow focus:shadow-sky-100' {...register("password")}/>
         </div>
         <div className='flex flex-col'>
           <label >Confirmé mot de passe:</label>
-          <input className='w-full rounded border border-stone-300 py-px px-2 text-xl text-xl focus:border-sky-300 focus:shadow focus:shadow-sky-100' {...register("confirmPassword")}/>
+          <input className='w-full rounded border border-stone-300 py-px px-2 text-xl focus:border-sky-300 focus:shadow focus:shadow-sky-100' {...register("confirmPassword")}/>
         </div>
         <div className='text-center my-4'>
           <input type='submit' className='py-4 px-6 bg-sky-800 text-white text-center rounded-md font-bold' value="S'inscrire"/>

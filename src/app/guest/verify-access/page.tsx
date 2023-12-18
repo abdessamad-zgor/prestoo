@@ -31,11 +31,9 @@ function VerifyCode() {
   const onSubmit: SubmitHandler<AccessCode> = async (data)=>{
     let presentationId = await verifyCode(data.code)
     let getPresentationData = async ()=>{
-      let presentationRef = ref(db, "presentations/"+presentationId);
-      let snapshot: DataSnapshot;
       try {
-        snapshot = await get(presentationRef);
-        return snapshot.val();
+        let res = await fetch(`/api/presentations/${presentationId}`);
+        return res.json()
       } catch (error) {
         console.log(error);
         return ;

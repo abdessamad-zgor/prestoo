@@ -1,9 +1,12 @@
+"use client"
 import React from 'react'
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form'
-import Link from 'next/link';
-import {auth} from "$/lib/firebase.config";
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import Link from 'next/link';
+
+import { auth } from "$/lib/firebase.config";
+import { PRESTOO_COOKIE_TOKEN } from '$/lib/util';
 
 type Credentials = {
   email: string,
@@ -17,6 +20,9 @@ export default function LoginForm() {
   const onSubmit: SubmitHandler<Credentials> = async (data)=>{
     try{
       let _ = await signInWithEmailAndPassword(auth, data.email, data.password);
+      const idToken = await auth.currentUser?.getIdToken(true);
+      document.cookie = `${PRESTOO_COOKIE_TOKEN}=${idToken}; path=/; expires=${(new Date(Date.now()+1000*60*60*24*7)).toUTCString()}`; 
+      console.log(document.cookie)
       router.replace("/dashboard")
     } catch (err) {
       console.error(err)
@@ -28,11 +34,11 @@ export default function LoginForm() {
       <div className='p-4 bg-white rounded-lg shadow-lg w-full'>
         <div className='flex flex-col'>
           <label>Email:</label>
-          <input className='w-full rounded border border-stone-300 py-px px-2 text-xl text-xl focus:border-sky-300 focus:shadow focus:shadow-sky-100' {...register("email")}/>
+          <input className='w-full rounded border border-stone-300 py-px px-2 text-xl focus:border-sky-300 focus:shadow focus:shadow-sky-100' {...register("email")}/>
         </div>
         <div>
           <label>Mot de passe:</label>
-          <input className='w-full rounded border border-stone-300 py-px px-2 text-xl text-xl focus:border-sky-300 focus:shadow focus:shadow-sky-100' {...register("password")}/>
+          <input className='w-full rounded border border-stone-300 py-px px-2 text-xl focus:border-sky-300 focus:shadow focus:shadow-sky-100' {...register("password")}/>
         </div>
         <div className='text-center my-4'>
           <input type="submit" className='py-4 px-6 bg-sky-800 text-white text-center rounded-md font-bold' value="Connexion"/>
